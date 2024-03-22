@@ -113,8 +113,8 @@ export const checkNFT = async () => {
   }
 }
 export const postCard = async (payLoad) => {
-  
-  const  pk =  await getPublicKey()
+
+  const pk = await getPublicKey()
   const url = 'https://api-sandbox.circle.com/v1/cards';
   const options = {
     method: 'POST',
@@ -146,11 +146,10 @@ export const postCard = async (payLoad) => {
     })
   };
 
-  fetch(url, options)
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.error('error:' + err));
-    
+  const resp = await fetch(url, options)
+  const card = await resp.json()
+  postPayment(card, payLoad)
+
 }
 
 const getPublicKey = async () => {
@@ -166,4 +165,43 @@ const getPublicKey = async () => {
 
   const resp = await fetch(url, options)
   return await resp.json()
-} 
+}
+
+export const postPayment = async (card, payLoad) => {
+  console.log(card)
+
+  const pk = await getPublicKey()
+  const url = 'https://api-sandbox.circle.com/v1/payments';
+  const options = {
+    method: 'POST',
+    headers: {
+      accept: 'application/json', 'content-type': 'application/json',
+      authorization: 'Bearer SAND_API_KEY:9783c9ab8e080ffe216e638f3801134d:90c3892d3eb3bd9a789989d2b370ede2'
+    },
+    body: JSON.stringify({
+      idempotencyKey: uuidv4(),
+      keyId: pk.data.keyId,
+      metadata: {
+        email: payLoad.email,
+        phoneNumber: payLoad.phone,
+        sessionId: 'DE6FA86F60BB47B379307F851E238617',
+        ipAddress: '244.28.239.130'
+      },
+      amount: { amount: payLoad.price, currency: 'USD' },
+      autoCapture: true,
+      verification: 'cvv',
+      verificationSuccessUrl: 'https://www.example.com/3ds/verificationsuccessful',
+      verificationFailureUrl: 'https://www.example.com/3ds/verificationfailure',
+      source: { id: card.data.id, type: 'card' },
+      description: 'Payment',
+      encryptedData: 'LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tDQpWZXJzaW9uOiBLZXliYXNlIE9wZW5QR1AgdjIuMC43Ng0KQ29tbWVudDogaHR0cHM6Ly9rZXliYXNlLmlvL2NyeXB0bw0KDQp3Y0JNQTBYV1NGbEZScFZoQVFnQXM4eHZFOUJQQWdHaElVVEdib3NacnFJLzNoNFB0ZmxOMjhDOU8yZ0MwU0NZDQpWK0tpZzhHRjlMTHJTVUQ3cVJGZGlYWXZKQm9oYTVCRUlwUkdXdDRhclc5TnoyNFUyVVF3ZTQ1R2VHN0hmTUNLDQptK1NrWmVPNmo3dkJ0b0NETnRvL1FwMk5IdEk5NWRNVXAwZWZRdWpIRnpPR3RldFJsREtuYjBMK0lXR0V4MUpvDQpvMW5ON01ueUk2aFpnNDIwa2c0RjRNVjErcmx1VlArcEhpVjZlcngzUlBOWlpKOE9XZDd4K1hiVXRNV2lPeVh0DQozN1hBRTlPd0h0YThNWG1RQm8rK01POEFrbXRBKzk0ZERYbXYrUFdMOEM5cjlqUS91QkxLTDFvMkY3SXBadkQ4DQozdzNCYVpTam1pNEdQRFArSGlqTUw3aTJIdzJOVklVejFFa3pYQXlSeE5JL0FiK2ZRa1UzaFlTeTZUa05lNUV5DQplZE5OQVpGY2w3aWpXV3o5SlRpcXdLRSttOU9zQTIzUjhRWkxySXNrM2d5em9ydWZ1c3pRSGZrdXZzdVJsTDYzDQo9bEJMbQ0KLS0tLS1FTkQgUEdQIE1FU1NBR0UtLS0tLQ==',
+      channel: 'ba943ff1-ca16-49b2-ba55-1057e70ca5c7'
+    })
+  };
+
+  fetch(url, options)
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error('error:' + err));
+
+}

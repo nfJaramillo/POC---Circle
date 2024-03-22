@@ -12,7 +12,7 @@ const Tickets = () => {
     const [open, setOpen] = React.useState(false);
     //const [maxTickets, setMaxTickets] = React.useState(0);
     //const [ticketId, setTicketId] = React.useState(0);
-    //const [ticketPrice, setTicketPrice] = React.useState(0);
+    const [ticketPrice, setTicketPrice] = React.useState(0);
     const [cardNumber, setCardNumber] = React.useState(0);
     const [CVV, setCVV] = React.useState(0);
     const [expiryMonth, setExpiryMonth] = React.useState(0);
@@ -54,7 +54,7 @@ const Tickets = () => {
     const handleClickOpen = (pMaxTickets, pTicketID, pTicketPrice) => {
         //setMaxTickets(pMaxTickets)
         //setTicketId(pTicketID)
-        //setTicketPrice(pTicketPrice)
+        setTicketPrice(pTicketPrice)
         console.log(pMaxTickets, pTicketID, pTicketPrice)
         setOpen(true);
     };
@@ -66,7 +66,7 @@ const Tickets = () => {
     const handlepurchase = async () => {
         const { address } = await getCurrentWalletConnected()
         if (address !== undefined && address.length > 1) {
-                let payLoad = { "cardNumer": cardNumber, "CVV": CVV, "expiryMonth": expiryMonth, "expiryYear": expiryYear, "fullName": fullName, "addressLine": addressLine, "postalCode": postalCode, "city": city, "district": district, "country": country, "phone": phone, "email": email }
+                let payLoad = {"price":ticketPrice, "cardNumer": cardNumber, "CVV": CVV, "expiryMonth": expiryMonth, "expiryYear": expiryYear, "fullName": fullName, "addressLine": addressLine, "postalCode": postalCode, "city": city, "district": district, "country": country, "phone": phone, "email": email }
                 postCard(payLoad)
                 const { severity, status } = { severity: 'success', status: 'Test' }
                 contextData.severity(severity)
@@ -114,7 +114,7 @@ const Tickets = () => {
                                             <br />
                                             <Typography display='inline' fontWeight='bold'>Precio: </Typography>
                                             <Typography display='inline' variant="body2" color="text.secondary" align="justify">
-                                                {nft['raw']['metadata']['price'] / 10 ** 18 + ' eth'}
+                                                {nft['raw']['metadata']['price'] + ' usd'}
                                             </Typography>
                                             <br />
                                             <Typography display='inline' fontWeight='bold'>Cantidad: </Typography>
