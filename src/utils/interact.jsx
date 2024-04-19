@@ -198,6 +198,33 @@ export const postPayment = async (card, payLoad) => {
     })
   };
 
+  const resp = await fetch(url, options)
+  const payment = await resp.json()
+  postPayout(payment, payLoad)
+
+}
+
+
+export const postPayout = async (payment, payLoad) => {
+  console.log(payment)
+
+
+  const url = 'https://api-sandbox.circle.com/v1/payouts';
+  const options = {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      authorization: 'Bearer SAND_API_KEY:9783c9ab8e080ffe216e638f3801134d:90c3892d3eb3bd9a789989d2b370ede2'
+    },
+    body: JSON.stringify({
+      idempotencyKey: uuidv4(),
+      destination: { type: 'address_book', id: 'ebd0408d-a809-544f-a3f2-eb3b88a288c7' },
+      amount: { amount: payLoad.price, currency: 'USD' },
+      toAmount: { currency: 'USD' }
+    })
+  };
+
   fetch(url, options)
     .then(res => res.json())
     .then(json => console.log(json))

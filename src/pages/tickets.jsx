@@ -55,7 +55,7 @@ const Tickets = () => {
         //setMaxTickets(pMaxTickets)
         //setTicketId(pTicketID)
         setTicketPrice(pTicketPrice)
-        console.log(pMaxTickets, pTicketID, pTicketPrice)
+        //console.log(pMaxTickets, pTicketID, pTicketPrice)
         setOpen(true);
     };
 
@@ -131,7 +131,7 @@ const Tickets = () => {
                                             <DialogTitle>Compra de boletas</DialogTitle>
                                             <DialogContent>
                                                 <Grid container >
-                                                    <Grid xs={5.5}>
+                                                    <Grid item xs={5.5}>
                                                         <DialogContentText>
                                                             Numero de tarjeta
                                                         </DialogContentText>
@@ -213,8 +213,8 @@ const Tickets = () => {
                                                             onChange={(event) => setPhone(event.target.value)}
                                                         />
                                                     </Grid>
-                                                    <Grid xs={1}></Grid>
-                                                    <Grid xs={5.5}>
+                                                    <Grid item xs={1}></Grid>
+                                                    <Grid item xs={5.5}>
                                                         <DialogContentText>
                                                             CVV
                                                         </DialogContentText>
